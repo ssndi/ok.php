@@ -1,3 +1,4 @@
+Ori
 <?php
 error_reporting(0);
 
@@ -124,7 +125,7 @@ $tukens = $json["data"]["token"];
 $time = mktime(hour, minute, second, month, day, year);
 $data3 = '{"device_model":"Redmi Note '.$oke.'","device_android":"1'.$oke.'","screen_name":"sign_up_verify_screen","device_sdk":"29","device_manufacture":"Xiaomi","event_date":"'.$time.'","event_name":"sign_up_verify_screen","device_android_version":"1'.$oke.'"}';
 $ch = curl_init();
-  curl_setopt($ch, CURLOPT_URL, 'https://ca6cl11co4ja5se6.https://juaranutrimenu.royco.co.id/api/camden/v1/add-user-screen-tracking');
+  curl_setopt($ch, CURLOPT_URL, 'https://ca6cl11co4ja5se6.juaranutrimenu.royco.co.id/api/camden/v1/add-user-screen-tracking');
   curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
   curl_setopt($ch, CURLOPT_POST, 1);
@@ -151,13 +152,13 @@ echo " \033[1;32m[\033[1;35m?\033[1;32m] Kode Reff => \033[1;33m";
 
 $data2 = '{"email":"'.$email.'@vomoto.com","firebase_token":"","login_method":"manual","name":"'.$juan8.'","password":"'.$juan8.'","refcode":"'.$reff.'","regis_device_id":"'.$tuken.'","regis_phone_number_id":"'.$regis.'"}';
 $ch = curl_init();
-  curl_setopt($ch, CURLOPT_URL, 'https://ca6cl11co4ja5se6.https://juaranutrimenu.royco.co.id/api/camden/v1/register-user');
+  curl_setopt($ch, CURLOPT_URL, 'https://ca6cl11co4ja5se6.juaranutrimenu.royco.co.id/api/camden/v1/register-user');
   curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
   curl_setopt($ch, CURLOPT_POST, 1);
   curl_setopt($ch, CURLOPT_POSTFIELDS, $data2);
 $headers = array();
-$headers[] ="ost: ca6cl11co4ja5se6.dealio.co.id";
+$headers[] ="ost: ca6cl11co4ja5se6.juaranutrimenu.royco.co.id";
 $headers[] ="authorization: $tukens";
 $headers[] ="content-type: application/json; charset=UTF-8";
 //$headers[] ="content-length: 83";
@@ -240,7 +241,7 @@ $udid = $json["uid"];
 
 $data6 = '{"token":"'.$cc.'"}';
 $ch = curl_init();
-  curl_setopt($ch, CURLOPT_URL, 'https://ca6cl11co4ja5se6.dealio.co.id/api/camden/v1/verify-email-user');
+  curl_setopt($ch, CURLOPT_URL, 'https://ca6cl11co4ja5se6.juaranutrimenu.royco.co.id/api/camden/v1/verify-email-user');
   curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
   curl_setopt($ch, CURLOPT_POST, 1);

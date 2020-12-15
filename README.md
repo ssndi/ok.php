@@ -1,268 +1,88 @@
-<?php
-error_reporting(0);
+import requests
+import argparse
+import json
+from bs4 import BeautifulSoup
+from urllib3 import disable_warnings
+from time import time
+from urllib3.exceptions import InsecureRequestWarning
+
+disable_warnings(InsecureRequestWarning)
+disable_warnings(InsecureRequestWarning)
+
+session = requests.Session()
 
 
-
-function acak($panjang)
-{
-$karakter= 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
-$string = '';
-for ($i = 0; $i < $panjang; $i++) {
-  $pos = rand(0, strlen($karakter)-1);
-  $string .= $karakter{$pos};
- }
-return $string;
-}
-function juanz($panjang)
-{
-$karakter= 'a123456789bcdefghijklmnopqrstuvwxyz';
-$string = '';
-for ($i = 0; $i < $panjang; $i++) {
-  $pos = rand(0, strlen($karakter)-1);
-  $string .= $karakter{$pos};
- }
-return $string;
-}
+def argParse():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("itemID")
+    args = parser.parse_args()
+    return args.itemID
 
 
+def login():
+    print('Log In...')
+    headers = {
+        "authority": "shopee.co.id",
+        "path": "/api/v2/authentication/login",
+        "scheme": "https",
+        "accept": "application/json",
+        "accept-encoding": "gzip, deflate, br",
+        "accept-language": "en,en-US;q=0.9",
+        "cache-control": "no-cache",
+        "content-type": "application/json",
+        "if-none-match-": "55b03-96f20d3a1457c2cbdccc6836c77b6d37",
+        "origin": "https://shopee.co.id",
+        "pragma": "no-cache",
+        "referer": "https://shopee.co.id/",
+        "sec-fetch-dest": "empty",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-site": "same-origin",
+        "x-api-source": "pc",
+        "x-csrftoken": 'u3SXW8YxuSTvrFJXo2etv28BVmahWYsr',
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36",
+        'referer': 'https://shopee.co.id/',
+        'Cookie': '_gcl_au=1.1.1834471157.1585507223; _fbp=fb.2.1585507224020.14904287; csrftoken=u3SXW8YxuSTvrFJXo2etv28BVmahWYsr; SPC_IA=-1; REC_T_ID=c1a26b6c-71ec-11ea-8b52-d0946614bb47; SPC_F=wgqyx5Brvbk01wt1kYDtiYeLLikiEDEB; REC_T_ID=c1c5d526-71ec-11ea-9662-40eeddd2d365; welcomePkgShown=true; _ga=GA1.3.1905306069.1585507227; _gid=GA1.3.1102905196.1585507227; G_ENABLED_IDPS=google; CTOKEN=SwUwy3HuEeqREvBj%2BRgSzg%3D%3D; AMP_TOKEN=%24NOT_FOUND; SPC_SI=vf54ia7m69qqv31hrfbxn72ar7o5545m; SPC_U=-; SPC_EC=-; REC_MD_20=1585591735; REC_MD_14=1585591898; REC_MD_30_2001304014=1585591826; _dc_gtm_UA-61904553-8=1; REC_MD_41_1000044=1585592031_0_50_0_47; SPC_R_T_ID="v0ek3k+H6MGb+HugLskxIfX3ITiZepYvNHojn9T71hpWuYDuOi7rPNf7x1lt9qhdEnwijBkQzL+HXckxrg0s8nMKxl203GV23mx138JDivw="; SPC_T_ID="v0ek3k+H6MGb+HugLskxIfX3ITiZepYvNHojn9T71hpWuYDuOi7rPNf7x1lt9qhdEnwijBkQzL+HXckxrg0s8nMKxl203GV23mx138JDivw="; SPC_R_T_IV="92RJVhF9KcqMZoN9hKmuzQ=="; SPC_T_IV="92RJVhF9KcqMZoN9hKmuzQ=="'
+    }
+    landing_url = 'https://shopee.co.id/'
+    landing_res = session.get(landing_url, headers=headers)
+    if landing_res.status_code != 200:
+        return False
+    cart_url = 'https://shopee.co.id/api/v1/account_info/?need_cart=1&skip_address=1'
+
+    get_res = session.get(cart_url, headers=headers, verify=False)
+    recommend_url = 'https://shopee.co.id/api/v2/recommendation/hot_search_words?limit=8&offset=0'
+    recommend_res = session.get(recommend_url, headers=headers, verify=False)
+    if get_res.status_code == 200 and recommend_res.status_code == 200:
+        post_data = {
+            "password": "5578b76d12a0eac49966b8840465784286f1babaf26a8ae47ac14c861597f7d9",
+            "captcha": "",
+            "support_whats_app": True,
+            "username": "kideveloper612"
+        }
+        login_url = 'https://shopee.co.id/api/v2/authentication/login'
+        post_res = session.post(login_url, headers=headers, data=post_data, allow_redirects=True, verify=False)
+        print(post_res.status_code)
+        if post_res.status_code == 403:
+            print('Incorrect email or password')
+            return False
+        else:
+            print('Sucessful Login')
+            session.get('https://www.instagram.com/', verify=False)
+            return True
+    else:
+        return False
 
 
-echo " ini $time \n";
-while(true){
-
-$d = rand (10, 16);
-//cara memanggilnya
-$juan30= juanz(34);
-$juan34= juanz(34);
-$juan12= juanz(12);
-$juanzz= juanz(16);
-$juan16= juanz($d);
-$juan10= acak(10);
-$juan19= acak(19);
-$juan8= juanz(8);
-$juan4= juanz(4);
-$juanz= juanz(4);
-$rand = rand (100000, 900000);
-$okeh = rand (1, 90);
-$okeh1 = rand (1, 90);
-$okeh3 = rand (1,90);
-$okeh4 = rand (1,90);
-$kim = rand (1000, 9000);
+def autoBuy():
+    ID = argParse()
+    initial_url = 'https://shopee.co.id/product/{}'.format(ID)
+    login_result = login()
+    if login_result:
+        print('Success')
+    else:
+        print('Failed')
 
 
-$res="\033[0m";
-$hitam="\033[0;30m";
-$abu2="\033[1;30m";
-$putih="\033[0;37m";
-$putih2="\033[1;37m";
-$red="\033[0;31m";
-$red2="\033[1;31m";
-$green="\033[0;32m";
-$green2="\033[1;32m";
-$yellow="\033[0;33m";
-$yellow2="\033[1;33m";
-$blue="\033[0;34m";
-$blue2="\033[1;34m";
-$purple="\033[0;35m";
-$purple2="\033[1;35m";
-$lblue="\033[0;36m"; 
-$lblue2="\033[1;36m";
-$cyan = "\e[1;96m";
-
-
-$rand = rand (10000000, 90000000);
-$kim = rand (30, 90);
-$oke = rand (1, 10);
-
-
-
-
-
-
-echo " \033[1;32m[\033[1;35m?\033[1;32m] Nomer => \033[1;33m";
-	$nope = trim(fgets(STDIN));
-$data = '{"device":"'.$juanzz.'","login_method":"manual","phone_number":"'.$nope.'"}';
-$ch = curl_init();
-  curl_setopt($ch, CURLOPT_URL, 'https://ca6cl11co4ja5se6.https://juaranutrimenu.royco.co.id');
-  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-  curl_setopt($ch, CURLOPT_POST, 1);
-  curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-$headers = array();
-$headers[] ="ost: ca6cl11co4ja5se6.juaranutrimenu.royco.co.id";
-$headers[] ="authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZ3Vlc3QiLCJwbGF0Zm9ybSI6ImFuZHJvaWQiLCJpYXQiOjE2MDY2NjEzNzAsImV4cCI6MTYwOTI1MzM3MH0.OzGbvcE3cxRSyonwQY3skXKHCrS86jFPiDKS_1jk7YI";
-$headers[] ="content-type: application/json; charset=UTF-8";
-//$headers[] ="content-length: 83";
-//$headers[] ="accept-encoding: gzip";
-$headers[] ="user-agent: okhttp/4.3.0";
-  curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);
- $result = curl_exec($ch);
- $json = json_decode($result,true);
-var_dump($result);
-$tuken = $json["data"]["regis_device_id"];
-$regis = $json["data"]["regis_phone_number_id"];
-$phone = $json["data"]["phone_number"];
-$otep = $json["data"]["otp_id"];
-echo "ini $tuken \n";
-
-
-echo " \033[1;32m[\033[1;35m?\033[1;32m] Otp => \033[1;33m";
-	$otpp = trim(fgets(STDIN));
-$data1 = '{"failed_count":0,"firebase_token":"","login_method":"manual","otp_code":"'.$otpp.'","otp_id":"'.$otep.'","regis_device_id":"'.$tuken.'","regis_phone_number_id":"'.$regis.'"}';
-$ch = curl_init();
-  curl_setopt($ch, CURLOPT_URL, 'https://ca6cl11co4ja5se6.juaranutrimenu.royco.co.id/api/camden/v1/check-register-otp');
-  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-  curl_setopt($ch, CURLOPT_POST, 1);
-  curl_setopt($ch, CURLOPT_POSTFIELDS, $data1);
-  curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);
- $result = curl_exec($ch);
- $json = json_decode($result,true);
-//var_dump($result);
-$tukens = $json["data"]["token"];
-
-$time = mktime(hour, minute, second, month, day, year);
-$data3 = '{"device_model":"Redmi Note '.$oke.'","device_android":"1'.$oke.'","screen_name":"sign_up_verify_screen","device_sdk":"29","device_manufacture":"Xiaomi","event_date":"'.$time.'","event_name":"sign_up_verify_screen","device_android_version":"1'.$oke.'"}';
-$ch = curl_init();
-  curl_setopt($ch, CURLOPT_URL, 'https://ca6cl11co4ja5se6.juaranutrimenu.royco.co.id/api/camden/v1/add-user-screen-tracking');
-  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-  curl_setopt($ch, CURLOPT_POST, 1);
-  curl_setopt($ch, CURLOPT_POSTFIELDS, $data3);
-$headers = array();
-$headers[] ="ost: ca6cl11co4ja5se6.dealio.co.id";
-$headers[] ="authorization: $tukens";
-$headers[] ="content-type: application/json; charset=UTF-8";
-//$headers[] ="content-length: 83";
-//$headers[] ="accept-encoding: gzip";
-$headers[] ="user-agent: okhttp/4.3.0";
-  curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);
- $result = curl_exec($ch);
- $json = json_decode($result,true);
-//var_dump($result);
-$email = "$juan16";
-//echo " \033[1;32m[\033[1;35m?\033[1;32m] email => $juan16 \033[1;33m";
-	
-	
-	
-
-echo " \033[1;32m[\033[1;35m?\033[1;32m] Kode Reff => \033[1;33m";
-	$reff = trim(fgets(STDIN));
-
-$data2 = '{"email":"'.$email.'@vomoto.com","firebase_token":"","login_method":"manual","name":"'.$juan8.'","password":"'.$juan8.'","refcode":"'.$reff.'","regis_device_id":"'.$tuken.'","regis_phone_number_id":"'.$regis.'"}';
-$ch = curl_init();
-  curl_setopt($ch, CURLOPT_URL, 'https://ca6cl11co4ja5se6.juaranutrimenu.royco.co.id/api/camden/v1/register-user');
-  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-  curl_setopt($ch, CURLOPT_POST, 1);
-  curl_setopt($ch, CURLOPT_POSTFIELDS, $data2);
-$headers = array();
-$headers[] ="ost: ca6cl11co4ja5se6.juaranutrimenu.royco.co.id";
-$headers[] ="authorization: $tukens";
-$headers[] ="content-type: application/json; charset=UTF-8";
-//$headers[] ="content-length: 83";
-//$headers[] ="accept-encoding: gzip";
-$headers[] ="user-agent: okhttp/4.3.0";
-  curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);
- $result = curl_exec($ch);
- $json = json_decode($result,true);
-var_dump($result);
-
-$ch = curl_init();
-  curl_setopt($ch, CURLOPT_URL, 'https://getnada.com/api/v1/u/'.$email.'@vomoto.com/1606666218');
-  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-$headers = array();
-$headers[] ="Host: getnada.com";
-$headers[] ="save-data: on";
-$headers[] ="user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36";
-$headers[] ="accept: */*";
-$headers[] ="sec-fetch-site: same-origin";
-$headers[] ="sec-fetch-mode: cors";
-$headers[] ="sec-fetch-dest: empty";
-$headers[] ="referer: https://getnada.com/";
-//$headers[] ="accept-encoding: gzip, deflate, br";
-//$headers[] ="accept-language: id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7";
-//$headers[] ="cookie: __gads=ID=cb217659af0d0ece:T=1599053857:S=ALNI_MYwPpwLGxi2RB_A3SX399wBQpKRoQ";
-//$headers[] ="cookie: tarteaucitron=!adsense=wait!gajs=wai";
-  curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
- $result = curl_exec($ch);
- $json = json_decode($result,true);
-//var_dump($result);
-sleep (10);
-$ch = curl_init();
-  curl_setopt($ch, CURLOPT_URL, 'https://getnada.com/api/v1/u/'.$juan16.'@vomoto/0');
-  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-  curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
- $result = curl_exec($ch);
- $json = json_decode($result,true);
-//var_dump($result);
-
-
-$ch = curl_init();
-  curl_setopt($ch, CURLOPT_URL, 'https://getnada.com/api/v1/inboxes/'.$email.'@vomoto.com');
-  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-  curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
- $result = curl_exec($ch);
- $json = json_decode($result,true);
-//var_dump($result);
-$uidd = $json["msgs"][0]["uid"];
-
-
-$ch = curl_init();
-  curl_setopt($ch, CURLOPT_URL, 'https://getnada.com/api/v1/messages/html/'.$uidd.'');
-  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-$headers = array();
-$headers[] ="Connection: keep-alive";
-$headers[] ="Upgrade-Insecure-Requests: 1";
-$headers[] ="Save-Data: on";
-$headers[] ="User-Agent: Mozilla/5.0 (Linux; Android 9; Redmi Note 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Mobile Safari/537.36";
-$headers[] ="Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9";
-$headers[] ="Sec-Fetch-Site: cross-site";
-$headers[] ="Sec-Fetch-Mode: navigate";
-$headers[] ="Sec-Fetch-User: ?1";
-$headers[] ="Sec-Fetch-Dest: document$";
-$headers[] ="Referer: https://getnada.com/api/v1/messages/html/$uidd";
-//$headers[] ="Accept-Encoding: gzip, deflate, br";
-//$headers[] ="Accept-Language: id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7";
-  curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
- $result = curl_exec($ch);
- $json = json_decode($result,true);
-//var_dump($result);
-$a = explode('<a href="https://webstatic.juaranutrimenu.royco.co.id/verify-email?token=', $result);
-$b = explode('&amp;email='.$email.'@vomoto.com" target="_blank"><img height="auto" src="https://s3-eu-west-1.amazonaws.com/topolio/uploads/5f9f97e32b938/1604305178.jpg" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;" width="600"></a>', $a[1]);
-$cc = $b[0];
-$udid = $json["uid"];
-
-
-$data6 = '{"token":"'.$cc.'"}';
-$ch = curl_init();
-  curl_setopt($ch, CURLOPT_URL, 'https://ca6cl11co4ja5se6.juaranutrimenu.royco.co.id/api/camden/v1/verify-email-user');
-  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-  curl_setopt($ch, CURLOPT_POST, 1);
-  curl_setopt($ch, CURLOPT_POSTFIELDS, $data6);
-$headers[] ="Host: ca6cl11co4ja5se6.juaranutrimenu.royco.co.id";
-//$headers[] ="content-length: 76";
-$headers[] ="accept: application/json, text/plain, */*";
-
-$headers[] ="save-data: on";
-$headers[] ="user-agent: Mozilla/5.0 (Linux; Android 10; Redmi Note 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36";
-$headers[] ="content-type: application/json;charset=UTF-8";
-$headers[] ="origin: https://webstatic.juaranutrimenu.royco.co.id";
-$headers[] ="sec-fetch-site: same-site";
-$headers[] ="sec-fetch-mode: cors";
-$headers[] ="sec-fetch-dest: empty";
-$headers[] ="referer: https://webstatic.juaranutrimenu.royco.co.id/";
-//$headers[] ="accept-encoding: gzip, deflate, br";
-//$headers[] ="accept-language: id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7";
-  curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
- $result = curl_exec($ch);
- $json = json_decode($result,true);
-var_dump($result);
-
-
-}
+if __name__ == "__main__":
+    autoBuy()
